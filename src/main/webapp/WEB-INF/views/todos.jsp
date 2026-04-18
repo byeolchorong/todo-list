@@ -15,16 +15,14 @@
 
   <h1 class="text-center mb-4">할 일 목록</h1>
 
-  <div class="card p-4 mb-4 shadow-sm">
-    <h2 class="h5 mb-3">할 일 등록</h2>
-
-    <form action="/todos" method="post" class="d-flex gap-2">
-      <input type="text" name="title"
-             class="form-control"
-             placeholder="할 일을 입력하세요">
-
-      <button type="submit" class="btn btn-primary">등록</button>
-    </form>
+  <div class="card shadow-sm mb-4 todo-form-card">
+    <div class="card-body">
+      <h2 class="h5 mb-3">할 일 등록</h2>
+      <form action="/todos" method="post" class="d-flex gap-2 flex-column flex-sm-row">
+        <input type="text" name="title" placeholder="할 일을 입력하세요" class="form-control">
+        <button type="submit" class="btn btn-primary">등록</button>
+      </form>
+    </div>
   </div>
 
   <c:choose>
@@ -38,64 +36,26 @@
       <ul class="list-group shadow-sm">
         <c:forEach var="todo" items="${todos}" varStatus="status">
 
-          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-
-            <div class="d-flex align-items-center gap-2 flex-grow-1">
-
-              <span class="text-muted">${status.index + 1}</span>
-
-              <!-- 평소 -->
-              <span id="title-text-${todo.id}" class="fw-medium">
-                  ${todo.title}
+          <li class="list-group-item todo-item ${todo.completed ? 'is-completed' : ''}">
+            <div class="todo-main">
+              <div class="todo-text-wrap">
+                <span class="todo-number">${status.index + 1}</span>
+                <span id="title-text-${todo.id}" class="todo-title-text">${todo.title}</span>
+                <input type="text" id="title-input-${todo.id}" value="${todo.title}" class="form-control todo-edit-input" style="display:none;">
+              </div>
+              <span class="badge ${todo.completed ? 'text-bg-success' : 'text-bg-secondary'}">
+                  ${todo.completed ? "완료" : "진행중"}
               </span>
-
-              <!-- 수정 -->
-              <input type="text"
-                     id="title-input-${todo.id}"
-                     value="${todo.title}"
-                     class="form-control"
-                     style="display:none; max-width: 200px;">
-
-              <span class="badge bg-secondary">
-                  ${todo.completed ? "완료" : "미완료"}
-              </span>
-
-              <input type="checkbox"
-                     class="form-check-input"
-                ${todo.completed ? "checked" : ""}
-                     onchange="toggleCompleted(${todo.id}, this.checked)">
             </div>
 
-            <div class="d-flex gap-2 mt-2 mt-md-0">
+            <div class="todo-actions">
+              <input type="checkbox" class="form-check-input" ${todo.completed ? "checked" : ""}
+                     onchange="toggleCompleted(${todo.id}, this.checked)">
 
-              <button type="button"
-                      id="edit-btn-${todo.id}"
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="showEdit(${todo.id})">
-                수정
-              </button>
-
-              <button type="button"
-                      class="btn btn-sm btn-outline-danger"
-                      onclick="deleteTodo(${todo.id})">
-                삭제
-              </button>
-
-              <button type="button"
-                      id="save-btn-${todo.id}"
-                      class="btn btn-sm btn-success"
-                      onclick="saveTodo(${todo.id}, ${todo.completed})"
-                      style="display:none;">
-                저장
-              </button>
-
-              <button type="button"
-                      id="cancel-btn-${todo.id}"
-                      class="btn btn-sm btn-warning"
-                      onclick="cancelTodo(${todo.id})"
-                      style="display:none;">
-                취소
-              </button>
+              <button type="button" id="edit-btn-${todo.id}" class="btn btn-sm btn-outline-secondary" onclick="showEdit(${todo.id})">수정</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteTodo(${todo.id})">삭제</button>
+              <button type="button" id="save-btn-${todo.id}" class="btn btn-sm btn-success" onclick="saveTodo(${todo.id}, ${todo.completed})" style="display:none;">저장</button>
+              <button type="button" id="cancel-btn-${todo.id}" class="btn btn-sm btn-warning" onclick="cancelTodo(${todo.id})" style="display:none;">취소</button>
             </div>
           </li>
         </c:forEach>
