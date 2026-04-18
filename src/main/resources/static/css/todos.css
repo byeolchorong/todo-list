@@ -1,0 +1,8 @@
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+input[type="checkbox"]:checked ~ span {
+    text-decoration: line-through;
+    color: #999;
+}
